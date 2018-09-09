@@ -267,7 +267,7 @@ super_genero <- ggplot(data = supervivencia, aes(y=conteo)) +
 
 
 print(super_genero)
-colnames(cons_trabajadores)
+
 # tiempo de supervivencia NIVEL CARGO -----------------------------------------
 
 supervivencia_cargo  <- ddply(cons_trabajadores,.(Estado_Trab,Nivel_cargo),
@@ -308,3 +308,19 @@ super_edad <- ggplot(data = supervivencia_rango_edad, aes(x=Rango_Edad, y=conteo
         theme(legend.position="none")
 
 print(super_edad)
+
+# Supervivencia por estrato -----------------------------------------------
+
+supervivencia_estrato  <- cons_trabajadores %>% ddply(.(Estado_Trab,Estrato),
+                                                      summarise,conteo=Antiguedad_meses)
+
+super_est<- ggplot(data = supervivencia_estrato, aes(x=Estrato, y=conteo)) + 
+        geom_boxplot(aes(fill=Estrato),width=0.5,outlier.size=-1)+
+        scale_y_continuous(breaks = breaks.fn.super )+
+        coord_flip()+theme_bw()+theme(strip.background=element_rect(fill="#05179F"))+  
+        theme(strip.text=element_text(colour="white",face="bold",size=20))+
+        labs(y="MESES (SUPERVIVENCIA)", x="ESTRATO", title="")+ theme(legend.text=element_text(size=15))+
+        theme( axis.title=element_text(size=14,face="bold"),axis.text.x = element_text(size = 12),axis.text.y = element_text(size = 12))+
+        theme(legend.position="none")
+
+print(super_est)
